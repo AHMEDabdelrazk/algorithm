@@ -1,0 +1,28 @@
+// insertion sort
+// complexity n*n
+// worst case you want A-order and the array D-order
+
+#include<iostream>
+using namespace std;
+int main() {
+    int elements_Number = 10;
+    int arr[10] = {5,9,3,1,4,10,6,8,2,7};
+    int inser_element = 0;
+    for(int i=1;i<elements_Number;i++)
+    {
+        int coun = i-1;
+        inser_element = arr[i];
+        // use < in loop for Ascending order 
+        // use > in loop for Descending order 
+        while(inser_element<arr[coun]&&coun>-1)
+        {
+            //swapping
+            arr[coun + 1] = arr[coun];
+            arr[coun] = inser_element;
+            coun--;
+        }
+    }
+    for(auto element:arr)
+        cout<<element<<" ";
+    return 0;
+}

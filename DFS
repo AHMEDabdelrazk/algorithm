@@ -1,0 +1,32 @@
+// Operations on a Fibonacci heap in C++
+
+#include <bits/stdc++.h>
+#include <cstdlib>
+#include <iostream>
+
+using namespace std;
+vector<vector<int>> rep;
+vector<vector<int>> dfs(vector<int>& v1,vector<int>& v2,int n){
+    if(v1.size()==n){
+        rep.push_back(v1);
+        return{};
+    }
+    for(int i=0;i<v2.size();i++){
+        vector<int> v3 = v2;
+        vector<int> v4 = v1;
+        v4.push_back(v3[i]);
+        v3.erase(v3.begin()+i);
+        dfs(v4,v3,n);
+    }
+    return rep;
+}
+int main() {
+    vector<int> V={},VV={1,2,3};
+    vector<vector<int>> res = dfs(V,VV,3);
+    for(int i=0;i<res.size();i++){
+        for(int j =0;j<res[i].size();j++)
+            cout<<res[i][j];
+        cout<<endl;
+    }
+    return 0;
+}

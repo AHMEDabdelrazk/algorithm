@@ -1,0 +1,39 @@
+class Solution {
+public:
+    bool flg = 0 ; 
+    int n , m;
+    vector<vector<map<string,bool>>> V;
+    vector<vector<char>> b;
+    string w;
+    void back(int i,int j,int coun,vector<vector<bool>> vist , string s ){
+        if(coun == w.size()) {
+            flg = 1;
+            return ;
+        }
+        if(i<0||j<0||i>=n||j>=m||coun>w.size())
+            return ;
+        if(b[i][j]==w[coun] && !vist[i][j] && !flg && !V[i][j][s] ){
+            coun++;
+            vector<vector<bool>> v = vist;
+            V[i][j][s] = 1;
+            v[i][j] = 1;
+            back(i-1,j,coun,v,s + w[coun-1]);
+            back(i,j-1,coun,v,s + w[coun-1]);
+            back(i+1,j,coun,v,s + w[coun-1]);
+            back(i,j+1,coun,v,s + w[coun-1]);
+        }
+        else return;
+    }
+    bool exist(vector<vector<char>>& board, string w) {
+        b = board ,  this->w = w , n = board.size() , m = board[0].size();
+        vector<vector<bool>> vis(10,vector<bool>(10));
+        V.resize(16,vector<map<string,bool>>(16));
+        for(int i=0;i<board.size();i++){
+            for(int j=0;j<board[0].size();j++){
+                if(board[i][j]==w[0] && !flg)
+                    back(i,j,0,vis,"");
+                }
+            }
+        return flg; 
+    }
+};

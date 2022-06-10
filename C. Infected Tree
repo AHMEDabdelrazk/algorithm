@@ -1,0 +1,43 @@
+/* BLACK F.L.G */
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int D(unordered_map<int,vector<int>>&tree,int root){
+    if(!tree[root].size())
+        return 0;
+    if(tree[root].size()>2)
+        return 2 + D(tree,tree[root][0]) + D(tree,tree[root][1]);
+    else
+        return 1 + D(tree,tree[root][0]);
+}
+int MIN = 10000000;
+void rec(int mn,unordered_map<int,vector<int>>&tree,int root){
+    if(!tree[root].size()){
+        MIN = min(MIN,mn);
+        return ;
+    }
+    if(tree[root].size()>1){
+        rec(mn+D(tree,tree[root][0]),tree,tree[root][1]);
+        rec(mn+D(tree,tree[root][1]),tree,tree[root][0]);
+    }
+    else {
+        rec(mn+D(tree,tree[root][0]),tree,3746464);
+    }
+}
+
+int main()
+{
+    int q;cin>>q;
+    while(q--){
+        unordered_map<int,vector<int>>tree;
+        int n;cin>>n;
+        for(int i=0;i<n-1;i++){
+            int i1,i2;cin>>i1>>i2;
+            tree[i1].push_back(i2);
+        }
+        rec(0,tree,1);
+        cout<<MIN+1<<endl;
+}
+	return 0;
+}

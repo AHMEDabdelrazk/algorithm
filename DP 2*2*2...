@@ -1,0 +1,40 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+string arr[100006];
+char k[100006];
+long long c[100006];
+map<pair<int,string>,long long>dp;
+long long inf=1e18;
+int n;
+long long fun(int i,string s)
+{
+    if(i==n) return 0;
+    if(dp.count({i,s})!=0) return dp[{i,s}];
+    string x=arr[i];
+    reverse(x.begin(),x.end());
+    if(arr[i]>=s&&x>=s) return dp[{i,s}]=min(fun(i+1,arr[i]),fun(i+1,x)+c[i]);
+    else if(arr[i]>=s) return dp[{i,s}]=fun(i+1,arr[i]);
+    else if(x>=s) return dp[{i,s}]=fun(i+1,x)+c[i];
+    else return dp[{i,s}]=inf;
+}
+
+int main()
+{
+    scanf("%d",&n);
+    for(int i=0;i<n;i++) scanf("%d",&c[i]);
+    for(int i=0;i<n;i++)
+    {
+        scanf("%s",k);
+        arr[i]=k;
+    }
+    long long ans=fun(0,"");
+    if(ans>=inf) printf("%d\n",-1);
+    else printf("%lld\n",ans);
+    return 0;
+}
+/////////////
+
+https://codeforces.com/contest/706/problem/C
+
+////////////

@@ -63,87 +63,73 @@ public:
 
 
 
-
-
-
-
-
-
-	Controller(QSharedPointer <PluginDataModel> dataModel, const QString& applicationPath);
-	void SetVolumesAndAssociatedMeshesMap(const VolumesMeshesMap& volumesMeshesMap);
-	void RemovePolyDataNode(std::shared_ptr<PolyDataNode> polyDataNode, int ViewerIndex);
-	BaseWizard* GetCurrentWizard();
-	void LoadPlan(DNA_ID planId);
-	QVector<QPair<DNA_ID,QString>> GetPlansIdNamePairs();
-	void HandleNextButton();
-	void HandlePreviousButton();
-	void HandleNextSubStepButton();
-	void HandleSkipSubStepButton();
-	void HandlePreviousSubStepButton();
-	void GoToPreviousStep(int stepId);
-    QVector<int> GetPlanStepsStatus();
-	void ClearVtkViewers();
-	void SetVtkViewersList(QVector<QSharedPointer<VtkViewer>>& vtkViewers);
-	QString GetFibulaOrientation();
-	void HandleModelSelect(DNA_ID meshId);
-	void HandleManualAlignment();
-	DNA_ID GetDefaultPlanId();
-	void ActivatePlaner(bool active);
-	void CalculateNaturalHeadPositionPlane(bool frankfort);
-	void CalculateFrankfortPlane();
-	void SaveNaturalHeadPosition(PlanOptions::NHPOptions selectedOption);
-	void SetPlaneThickness(double thickness);
-	ViewerVisualProps GetViewerVisualProperties(int viewerIndex);
-	void SetModelVisibilty(int modelId, bool visible, int viewerIndex);
-	void SetVolumeVisibilty(bool visible, int viewerIndex);
-	void SetModelOpacity(int modelId, double opacity, int viewerIndex)
-	void SetVolumeTransferFunction(int transferFunction, int viewerIndex);
-	void SetNumberOfGraftSegments(int segments);
-	int GetNumberOfGraftSegments();
-	void SetPedicleOrientation(GraftEnums::PedicleOrientation pedicleOrientation);
-	GraftEnums::PedicleOrientation GetPedicleOrientation();
-	void SetKneeDistance(int distance);
-	void SetAnkleDistance(int distance);
-	QPair<int, int> GetAnkleAndKneeMinMaxDist();
-	int GetAnkleDistance();	
-	int GetKneeDistance();
-	int GetGraftTranslation();
-	int GetMaxGraftTranslation();
-	int GetGraftRotation();
-	void SetGraftSelection(int graftIndex);
-	void SetGraftsOffset(int offset);
-	void SetGraftsRotation(int rotation);
-	void OptimizeGrafts();
-	void ResetGrafts();
-	void ActivateCurrentStep();
-	void AddModelVisualProperty(DNA_ID modelId, QString modelIdInViewer, QString modelName, int viewerIndex, double opacity = 1);
-	void RemoveModelVisualProperty(QString modelIdInViewer, int viewerIndex);
-	void SetNaturalHeadPosition();
-	void SetOsteotemiesVisibilty(bool visible);
-	bool GetOsteotemiesVisibilty();
-	QVector<QString> GetTransferFunctionsNames();
-signals:
-	void SignalCurrentStepChanged(int stepId);
-	void SignalCurrentSubwizardStepChanged(int stepId);
-	void SignalVolumeMeshesMapChanged();
-	void SignalSave(int id);
-	void SignalDelete(int id);
-slot:
-	void SlotChangePlanName(DNA_ID id, QString name);
-
-private:
-
-	/*Resource Path for planning plugin*/
-	QString mResourcePath
-	QVector<QMap<QString, QString>> mPlanningConfig;
-	std::shared_ptr<BaseWizard> mCurrentWizard;
-	std::shared_ptr<BasePlan> mCurrentPlan;
-	QSharedPointer<PluginDataModel> mPluginDataModel;
-	QMap<QPair<DNA_ID, QString>, QVector<QPair<DNA_ID, QString>>> mVolumesMeshesMap;
-	QVector<QSharedPointer<VtkViewer>> mVtkViewers;
-	QVector<QVector<QString>> mViewElementsIds;
-	DNA_ID mDefaultPlanId;
-	QString mApplicationPath;
-	QVector<ViewerVisualProps> mViewersVisualProps;
-	void InitializeVolumeMeshesMap();
-	QSharedPointer<TransferFunction> mTransferFunction;
+	static QVector<DPlane> CreateMandiblePlanes(DPlane osteotomyPlane1 DPlane osteotomyPlane2 DPolyLine mandiblePolyline
+	static DPolyLine ApproximateCurveToPolyLine(DPolyLine resectedPieceMidline int noOfSegments
+	static vtkSmartPointer<vtkPolyData> TransformPolydata(vtkSmartPointer<vtkPolyData> polyData vtkSmartPointer<vtkTransform> transform
+	static QVector<double> CalculateGraftOffsets(double fibulaFirstGraftOffset
+		QVector<double> graftOffsetsUserAdjusted
+		QVector<double> graftLengths
+		double fibulaThickness
+	static QVector<DPlane> CalculateFibulaPlanes(
+	    const QVector<vtkSmartPointer<vtkTransform>> & transforms
+		const QVector<DPlane> & mandiblePlanes
+		double fibulaThickness
+		const QVector<double> & graftRotations
+		bool reversMidlineVector = false
+	static QVector<double> CalculateGraftPadding(double padding int numGrafts
+	
+	
+	
+	
+	
+	
+	
+	
+	    static std::shared_ptr<DMesh> Resection(std::shared_ptr<DNA_Plane<double>>& plane, const double& thickness, const int& boxHeight = 100, const int& boxWidth = 100);
+    static vtkSmartPointer<vtkPolyData> ResectionPolyData(std::shared_ptr<DNA_Plane<double>>& plane, const double& thickness, const int& boxHeight = 100, const int& boxWidth = 100);
+    static std::shared_ptr<FMesh> CropMesh(const std::shared_ptr <FMesh> meshToCrop, const  FPlane& croppingPlane, bool isAddCAP, bool isDiscardSameAsNormal);
+    static vtkSmartPointer<vtkPolyData> PolydataCut(vtkSmartPointer<vtkPolyData> CutShape, vtkSmartPointer<vtkPolyData> PolydataToCut, bool fastCut = false);
+    static vtkSmartPointer<vtkPolyData> CleanPolyData(vtkPolyData* polydata);
+    static vtkSmartPointer<vtkPolyData> PolyLineToPolyData(const std::shared_ptr< DPolyLine>& polyLine, int splineResolution = 300);
+    static std::shared_ptr<DPolyLine> CalulateMeshMidline(const std::shared_ptr<DMesh>& mesh, int steps = 10);
+    static vtkSmartPointer<vtkPolyData> DecimatePolyData(vtkSmartPointer<vtkPolyData> polyData, double ratio);
+    static DPoint3 GetCentroid(vtkSmartPointer<vtkPolyData> polyData);
+    static QVector< vtkSmartPointer<vtkPolyData>> SeperateDisconnectedRegions(vtkSmartPointer<vtkPolyData> polyData, int maxRegionNum = 3);
+    static vtkSmartPointer<vtkPolyData> FindClosestPolyDataRegion(const vtkSmartPointer<vtkPolyData>& polyData, const DPoint3& point);
+    static QVector<std::shared_ptr<DMesh>> GetResectionPieces(std::shared_ptr<DMesh> mesh, std::shared_ptr<DMesh> firstOsteotemyMesh, std::shared_ptr<DPlane> firtPlane, std::shared_ptr<DMesh> secondOsteotemyMesh, std::shared_ptr<DPlane> secondPlane);
+    static QVector<std::shared_ptr<DMesh>> GetResectionPiecesFromPolyData(vtkSmartPointer<vtkPolyData>& polyData, std::shared_ptr<DPlane> resectedPlane1, std::shared_ptr<DPlane> resectedPlane2 = nullptr);
+    static int FindClosestPolyDataIndex(QVector< vtkSmartPointer<vtkPolyData>>& polyDataList, DPoint3 point);
+    static QVector<double> LineSpace(double start, double end, int num);
+    static vector<DPoint3> LineSpace(DPoint3 startPoint, DPoint3 endPoint, int num);
+static DVector3 MakeVectorOrthogonal(DVector3 lateralVector, DVector3 vectorReference);
+static void VtkPolyDataToModel(const vtkSmartPointer<vtkPolyData> pPolyData, std::shared_ptr<DMesh> model, bool isTriangle = true);
+static void ModelToVtkPolyData(const std::shared_ptr<DMesh> model, vtkSmartPointer<vtkPolyData>& pPolyData, bool bFlipFaces = false);
+static QVector<std::shared_ptr<DMesh>> ApplyResectionPlanesOnMesh(const std::shared_ptr<DMesh>& mesh, const QVector<DPlane>& resectionPlanes, double cuttingThickness, bool fastCut = false);
+static QPair<double, double> GetMinMaxMeshDistance(std::shared_ptr<DMesh> firstMesh, std::shared_ptr<DMesh> secondMesh);
+static DNA_TransformationMatrix<float> ConvertVtkTransformToTransformationMatrixF(vtkSmartPointer<vtkTransform> transform);
+static DNA_TransformationMatrix<double> ConvertVtkTransformToTransformationMatrixD(vtkSmartPointer<vtkTransform> transform);
+static vtkSmartPointer<vtkTransform> ConvertTransformationMatrixToVtkTransform(const DNA_TransformationMatrix<double>& transformationMatrix);
+static DPlane ApplyTransformToPlane(DPlane plane, vtkSmartPointer<vtkTransform> transform);
+static int  FindClosestPointIndex(DPoint3 point, vtkSmartPointer<vtkPolyData> polyLinePolyData);
+static vtkSmartPointer<vtkPolyData> TransformPolydata(vtkSmartPointer<vtkPolyData> polyData, vtkSmartPointer<vtkTransform> transform);
+static DVector3 CalculateVectorFromCentroidTowardsPoint(vtkSmartPointer<vtkPolyData> polyData, DPoint3 point);
+static vtkSmartPointer<vtkPolyData> PolydataCutGetRemoved(vtkSmartPointer<vtkPolyData> CutShape, vtkSmartPointer<vtkPolyData> PolydataToCut);
+static vtkSmartPointer<vtkPoints> GetPolyDataMeanFaces(vtkSmartPointer<vtkPolyData> polyData);
+ static DPoint3 FindClosestMidlinePoint(float distance, vtkSmartPointer<vtkPolyData> midlinePolyData);
+static QVector<vtkSmartPointer<vtkTransform>> CalculateMidlineTransform(
+       const QVector<double> & offsets,
+       DPolyLine sourcePolyLine,
+       DPolyLine distinationPolyLine,
+       DVector3 distinationLateralVector,
+       const DPoint3& sourceCentroid,
+       bool reversMidlineVector = false);
+   static vtkSmartPointer<vtkTransform> GetTransformFromPoints(
+       const vtkSmartPointer<vtkPoints> & sourcePoints,
+       const vtkSmartPointer<vtkPoints> & distinationPoints
+       );
+    static vtkSmartPointer<vtkPolyData>  CalculateCrossSectionContour(DPlane plane, vtkSmartPointer<vtkPolyData> polydata);
+    static QVector<vtkSmartPointer<vtkTransform>> ApplyInverseTransform(const QVector<vtkSmartPointer<vtkTransform>>& mainTransforms);
+    static QVector<vtkSmartPointer<vtkPolyData>> TransformPolydata(QVector<vtkSmartPointer<vtkPolyData>>& segments, QVector<vtkSmartPointer<vtkTransform>>& listOfTransforms);
+    static DPlane GetCutPlaneOnPolyData(const DPoint3& point, const vtkSmartPointer<vtkPolyData>& polyData);
+    static QVector<DPlane> ProjectPlanesToPolyLine(shared_ptr<DPolyLine>polyline,const QVector<DPlane>& planes); 
+     static QVector<QString> ModelVisualNames(QString inputString);

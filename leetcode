@@ -37,3 +37,113 @@ public:
         return flg; 
     }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	Controller(QSharedPointer <PluginDataModel> dataModel, const QString& applicationPath);
+	void SetVolumesAndAssociatedMeshesMap(const VolumesMeshesMap& volumesMeshesMap);
+	void RemovePolyDataNode(std::shared_ptr<PolyDataNode> polyDataNode, int ViewerIndex);
+	BaseWizard* GetCurrentWizard();
+	void LoadPlan(DNA_ID planId);
+	QVector<QPair<DNA_ID,QString>> GetPlansIdNamePairs();
+	void HandleNextButton();
+	void HandlePreviousButton();
+	void HandleNextSubStepButton();
+	void HandleSkipSubStepButton();
+	void HandlePreviousSubStepButton();
+	void GoToPreviousStep(int stepId);
+    QVector<int> GetPlanStepsStatus();
+	void ClearVtkViewers();
+	void SetVtkViewersList(QVector<QSharedPointer<VtkViewer>>& vtkViewers);
+	QString GetFibulaOrientation();
+	void HandleModelSelect(DNA_ID meshId);
+	void HandleManualAlignment();
+	DNA_ID GetDefaultPlanId();
+	void ActivatePlaner(bool active);
+	void CalculateNaturalHeadPositionPlane(bool frankfort);
+	void CalculateFrankfortPlane();
+	void SaveNaturalHeadPosition(PlanOptions::NHPOptions selectedOption);
+	void SetPlaneThickness(double thickness);
+	ViewerVisualProps GetViewerVisualProperties(int viewerIndex);
+	void SetModelVisibilty(int modelId, bool visible, int viewerIndex);
+	void SetVolumeVisibilty(bool visible, int viewerIndex);
+	void SetModelOpacity(int modelId, double opacity, int viewerIndex)
+	void SetVolumeTransferFunction(int transferFunction, int viewerIndex);
+	void SetNumberOfGraftSegments(int segments);
+	int GetNumberOfGraftSegments();
+	void SetPedicleOrientation(GraftEnums::PedicleOrientation pedicleOrientation);
+	GraftEnums::PedicleOrientation GetPedicleOrientation();
+	void SetKneeDistance(int distance);
+	void SetAnkleDistance(int distance);
+	QPair<int, int> GetAnkleAndKneeMinMaxDist();
+	int GetAnkleDistance();	
+	int GetKneeDistance();
+	int GetGraftTranslation();
+	int GetMaxGraftTranslation();
+	int GetGraftRotation();
+	void SetGraftSelection(int graftIndex);
+	void SetGraftsOffset(int offset);
+	void SetGraftsRotation(int rotation);
+	void OptimizeGrafts();
+	void ResetGrafts();
+	void ActivateCurrentStep();
+	void AddModelVisualProperty(DNA_ID modelId, QString modelIdInViewer, QString modelName, int viewerIndex, double opacity = 1);
+	void RemoveModelVisualProperty(QString modelIdInViewer, int viewerIndex);
+	void SetNaturalHeadPosition();
+	void SetOsteotemiesVisibilty(bool visible);
+	bool GetOsteotemiesVisibilty();
+	QVector<QString> GetTransferFunctionsNames();
+signals:
+	void SignalCurrentStepChanged(int stepId);
+	void SignalCurrentSubwizardStepChanged(int stepId);
+	void SignalVolumeMeshesMapChanged();
+	void SignalSave(int id);
+	void SignalDelete(int id);
+slot:
+	void SlotChangePlanName(DNA_ID id, QString name);
+
+private:
+
+	/*Resource Path for planning plugin*/
+	QString mResourcePath
+	QVector<QMap<QString, QString>> mPlanningConfig;
+	std::shared_ptr<BaseWizard> mCurrentWizard;
+	std::shared_ptr<BasePlan> mCurrentPlan;
+	QSharedPointer<PluginDataModel> mPluginDataModel;
+	QMap<QPair<DNA_ID, QString>, QVector<QPair<DNA_ID, QString>>> mVolumesMeshesMap;
+	QVector<QSharedPointer<VtkViewer>> mVtkViewers;
+	QVector<QVector<QString>> mViewElementsIds;
+	DNA_ID mDefaultPlanId;
+	QString mApplicationPath;
+	QVector<ViewerVisualProps> mViewersVisualProps;
+	void InitializeVolumeMeshesMap();
+	QSharedPointer<TransferFunction> mTransferFunction;

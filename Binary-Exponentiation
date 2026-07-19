@@ -1,0 +1,18 @@
+when?
+You need Binary Exponentiation whenever a problem requires you to calculate $A^B \pmod C$ and B is very larg
+
+examble?
+https://codeforces.com/contest/2246/problem/C
+
+basecode?
+// Function to compute (base^exp) % MOD
+long long power(long long base, long long exp) {
+    long long res = 1;
+    base %= MOD;
+    while (exp > 0) {
+        if (exp % 2 == 1) res = (res * base) % MOD;
+        base = (base * base) % MOD;
+        exp /= 2;
+    }
+    return res;
+}

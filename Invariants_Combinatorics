@@ -1,0 +1,98 @@
+https://codeforces.com/contest/2256/problem/D
+
+Invariants [What properties never change after the operation?]
+Combinatorics / Stars and Bars [How many ways can I distribute z zeros among x non-empty zero-runs?]
+Constructive characterization / Reachability
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+
+const ll MOD = 998244353;
+const int MAXN = 1000000 + 5;
+
+ll f[MAXN];
+ll If[MAXN];
+
+ll modPow(ll a, ll e) {
+    ll res = 1;
+    while (e > 0) {
+        if (e & 1)
+            res = res * a % MOD;
+        a = a * a % MOD;
+        e >>= 1;
+    }
+    return res;
+}
+
+ll C(int n, int r) {
+    if (r < 0 || r > n)
+        return 0;
+    return f[n] * If[r] % MOD * If[n - r] % MOD;
+}
+
+void solve() {
+    int n;
+    cin >> n;
+    string s;
+    cin >> s;
+
+    int zeros = 0;
+    int ones = 0;
+    int runs = 1;
+
+    for (char c : s) {
+        if (c == '0')
+            zeros++;
+        else
+            ones++;
+    }
+
+    for (int i = 1; i < n; ++i) { if (s[i] != s[i - 1])runs++;}
+    if (runs == 1) {cout << 1 << '\n';return;}
+
+    int zeroRuns;
+    int oneRuns;
+
+    if (s[0] == '0') {
+        zeroRuns = (runs + 1) / 2;
+        oneRuns = runs / 2;
+    }
+    else {
+        oneRuns = (runs + 1) / 2;
+        zeroRuns = runs / 2;
+    }
+
+    ll waysZero = C(zeros - 1, zeroRuns - 1);
+    ll waysOne = C(ones - 1, oneRuns - 1);
+
+    ll answer = waysZero * waysOne % MOD;
+
+    cout << answer << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    f[0] = 1;
+
+    for (int i = 1; i < MAXN; ++i)
+        f[i] = f[i - 1] * i % MOD;
+
+    If[MAXN - 1] = modPow(f[MAXN - 1], MOD - 2);
+
+    for (int i = MAXN - 1; i >= 1; --i)
+        If[i - 1] = If[i] * i % MOD;
+
+    int t;
+    cin >> t;
+
+    while (t--) {
+        solve();
+    }
+
+    return 0;
+}

@@ -7,11 +7,13 @@ Algorithm's and data structure using c++
 
 // intermediate
 
-1- Dijkstra
+1- Dijkstra (Non-negative, Greedy)
 
-2- Bellman Ford
+2- Bellman Ford (Positive, zero, and negative, Dynamic Programming)
 
 3- Kruskal's Algorithm MST (Disjoint Set (Union-Find))
+
+4- Bit Manipulation / Bitmasking
 
 // advanced
 
